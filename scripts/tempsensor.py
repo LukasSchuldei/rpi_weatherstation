@@ -48,7 +48,7 @@ def write_to_csv():
 
                 writer.writerow({'Timestamp': timestamp.strftime("%d/%m/%Y %H:%M:%S"), 'Temperature': temperature})
 
-        time.sleep(15)  # Set the interval for data logging
+        time.sleep(900)  # Set the interval for data logging, 15min
 
 if __name__ == "__main__":
     # To run log data, uncomment below:
