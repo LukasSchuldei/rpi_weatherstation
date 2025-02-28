@@ -32,7 +32,7 @@ def write_to_csv():
         
         if temperature is not None:
             date_str = timestamp.strftime("%Y%m%d")
-            filename = os.path.join(os.getcwd(), '../data', f"tempdata_{date_str}.csv")
+            filename = os.path.join(os.getcwd(), 'data', f"tempdata_{date_str}.csv")
 
             # Ensure the data directory exists
             os.makedirs(os.path.dirname(filename), exist_ok=True)
