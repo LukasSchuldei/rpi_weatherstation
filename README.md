@@ -57,4 +57,37 @@ dtoverlay=w1-gpio,gpiopin=2
 
 After making this change, reboot your Raspberry Pi (`sudo reboot`).
 
+## Setting Up a systemd Service for the tempsensor.py Script 
+
+A systemd service has been configured to automatically start the tempsensor.py script upon system boot. This script is responsible for reading temperature data from a sensor and logging it. 
+Service Configuration Details 
+
+Here is the configuration of the service file:
+
+```
+[Unit]
+Description=tempsensor.py service
+After=network.target
+
+[Service]
+ExecStart=python /your/path/to/rpi_weatherstation/scripts/tempsensor.py
+WorkingDirectory=/your/path/to/rpi_weatherstation/
+Restart=always
+User=****
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+``` 
+ 
+
+    Description:  Provides a brief description of the service and its purpose.
+    After:  Ensures that the network service is up and running before executing the script.
+    ExecStart:  Specifies the command to start the Python script.
+    WorkingDirectory:  Sets the working directory from which the script is executed.
+    Restart:  Configures the service to automatically restart if it stops unexpectedly.
+    User:  The user under which the service runs. Replace `****` with the appropriate user name.
+    Environment:  Sets environment variables, in this case ensuring Python does not buffer output.
+
+
 This should cover the basics of connecting and reading from the DS18B20 temperature sensor with your Raspberry Pi. Happy monitoring!
