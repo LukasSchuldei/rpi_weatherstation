@@ -4,8 +4,22 @@ import glob
 import time
 import datetime
 import csv
+from zoneinfo import ZoneInfo
 
-def read_temp(decimals=1):
+device_name= "Peter" #TODO Create .env import
+measurement_interval=1 # Set the interval between measurements, in seconds: 900 = 15 min
+test_mode= False # To only print into command line, change to True
+
+# Sensor read functions
+
+def read_pressure():
+    # Pretend to read sensor data
+    return 1013.2
+
+def read_humidity():
+    return 45.6
+
+def read_temperature(decimals=1):
     """Reads the temperature from a 1-wire device and returns it."""
     device = glob.glob("/sys/bus/w1/devices/" + "28*")[0] + "/w1_slave"
     try:
@@ -22,37 +36,73 @@ def read_temp(decimals=1):
             return temp
     except IndexError:
         print("Sensor not found or not connected properly.")
+        #TODO add error logging
         return None
+    
+    
+    
+# Edit list to add/change sensor-readouts
+# First: label of sensor, second: function that reads sensor
+# Example: ("temperature", read_temperature)
+SENSORS = [
+    #("temperature", read_temperature),
+    ("pressure", read_pressure),
+    ("humidity", read_humidity)
+]
 
-def write_to_csv():
-    """Writes the timestamp and temperature to a CSV file."""
-    while True:
-        timestamp = datetime.datetime.now()
-        temperature = read_temp()
+
+def get_sensor_data(): # Calls sensor read functions from list SENSORS, creates dictionary with label of sensor and returned value
+    #TODO add timestamp here, but as first key in the dictionary
+    return {label: func() for label, func in SENSORS}    
+
+
+def write_data_to_csv(row_data, file_prefix=device_name, directory="data", max_rows=10000):
+    
+    timestamp = datetime.datetime.now(tz=ZoneInfo("Europe/Berlin"))
+    # Track how many rows have been written
+    # If no row or file numbering exist create them
+    if not hasattr(write_data_to_csv, "row_count"):
+        write_data_to_csv.row_count = 0
+        write_data_to_csv.file_index = 0
+
+    # Create folder if it doesn't exist
+    os.makedirs(directory, exist_ok=True)
+
+    # Rotate file if limit reached
+    if write_data_to_csv.row_count % max_rows == 0:
+        filename = f"{file_prefix}_{write_data_to_csv.file_index:03d}_{timestamp.isoformat()}.csv" 
+        write_data_to_csv.current_file = os.path.join(directory, filename)
+        write_data_to_csv.file_index += 1
+        write_data_to_csv.need_header = True
+    else:
+        write_data_to_csv.need_header = False
+
+    # Write data to the current file 
+    with open(write_data_to_csv.current_file, "a", newline="") as csv_file:
         
-        if temperature is not None:
-            date_str = timestamp.strftime("%Y%m%d")
-            filename = os.path.join(os.getcwd(), 'data', f"tempdata_{date_str}.csv")
+        fieldnames = ["timestamp"] + [label for label, _ in SENSORS] # Create the correct order of the column labels
+        row_data["timestamp"] = timestamp.strftime("%d/%m/%Y %H:%M:%S") #TODO Maybe change to .isoformat(): 2025-04-11T15:24:02
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
-            # Ensure the data directory exists
-            os.makedirs(os.path.dirname(filename), exist_ok=True)
+        if write_data_to_csv.need_header:
+            writer.writeheader()
 
-            file_exists = os.path.isfile(filename)
-            with open(filename, 'a', newline='') as csvfile:
-                fieldnames = ['Timestamp', 'Temperature']
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-                # Write the header only if the file doesn't exist
-                if not file_exists:
-                    writer.writeheader()
-
-                writer.writerow({'Timestamp': timestamp.strftime("%d/%m/%Y %H:%M:%S"), 'Temperature': temperature})
-
-        time.sleep(900)  # Set the interval for data logging, 15min
-
+        writer.writerow(row_data)
+        write_data_to_csv.row_count += 1  
+        
+# Log data to csv indefinetly         
+def measurement_loop(test_mode):
+    
+    if test_mode: # No data is being saved to files!
+        while True:        
+            write_data_to_csv(get_sensor_data())
+            print(get_sensor_data())
+            time.sleep(measurement_interval)
+    else:
+        while True:        
+            write_data_to_csv(get_sensor_data()) # Save data to csv
+            time.sleep(measurement_interval)
+        
 if __name__ == "__main__":
-    # To run log data, uncomment below:
-    write_to_csv()
-
-    # To only read temperature data, uncomment below:
-    # print(read_temp())
+        
+    measurement_loop(test_mode)
