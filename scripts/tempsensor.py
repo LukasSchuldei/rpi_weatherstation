@@ -5,7 +5,7 @@ import time
 import datetime
 import csv
 from zoneinfo import ZoneInfo
-
+from display_to_lcd import print_to_LCD
 device_name= "Peter" #TODO Create .env import
 measurement_interval=1 # Set the interval between measurements, in seconds: 900 = 15 min
 test_mode= False # To only print into command line, change to True
@@ -95,9 +95,11 @@ def measurement_loop(test_mode):
     
     if test_mode: # No data is being saved to files!
         while True:        
-            write_data_to_csv(get_sensor_data())
-            print(get_sensor_data())
+            sensor_data=get_sensor_data()
+            print(sensor_data)
+            print_to_LCD(measurment_values=sensor_data)
             time.sleep(measurement_interval)
+            
     else:
         while True:        
             write_data_to_csv(get_sensor_data()) # Save data to csv
