@@ -45,9 +45,9 @@ def read_temperature(decimals=1):
 # First: label of sensor, second: function that reads sensor
 # Example: ("temperature", read_temperature)
 SENSORS = [
-    #("temperature", read_temperature),
-    ("pressure", read_pressure),
-    ("humidity", read_humidity)
+    ("temperature", read_temperature),
+    #("pressure", read_pressure),
+    #("humidity", read_humidity)
 ]
 
 
@@ -95,7 +95,6 @@ def measurement_loop(test_mode):
     
     if test_mode: # No data is being saved to files!
         while True:        
-            write_data_to_csv(get_sensor_data())
             print(get_sensor_data())
             time.sleep(measurement_interval)
     else:
