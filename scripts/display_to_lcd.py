@@ -1,9 +1,8 @@
 import board #pip install adafruit-blinka
-from CircuitPython_LCD.lcd.lcd import LCD #pip3 install adafruit-circuitpython-lis3dh git clone https://github.com/dhalbert/CircuitPython_LCD
-from CircuitPython_LCD.lcd.lcd import CursorMode
+from lcd.lcd import LCD #pip3 install adafruit-circuitpython-lis3dh 
+from lcd.lcd import CursorMode
+from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
 import time 
-
-from CircuitPython_LCD.lcd.i2c_pcf8574_interface import I2CPCF8574Interface
 
 def print_to_LCD(measurement_values):
     
