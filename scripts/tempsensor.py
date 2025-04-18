@@ -97,7 +97,7 @@ def measurement_loop(test_mode):
         while True:        
             sensor_data=get_sensor_data()
             print(sensor_data)
-            print_to_LCD(measurment_values=sensor_data)
+            print_to_LCD(measurement_values=sensor_data)
             time.sleep(measurement_interval)
             
     else:

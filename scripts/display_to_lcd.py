@@ -19,6 +19,19 @@ def print_to_LCD(measurement_values):
     sensor_items = list(measurement_values.items())
     total_sensors = len(sensor_items)
 
+    print_to_LCD.lcd.clear()
+    for i in range(1,2):
+        try:
+            key, val = sensor_items[i]
+            line = f"{key[:4]}: {val}"[:16]
+            print_to_LCD.lcd.set_cursor_pos(i, 0)
+            print_to_LCD.lcd.print(line)
+            
+        except ValueError:
+            print(f"No {i}. element in measurement_values")
+    
+
+""""
     # Display two sensors at a time
     for i in range(0, total_sensors, 2):
         print_to_LCD.lcd.clear()
@@ -36,3 +49,5 @@ def print_to_LCD(measurement_values):
             print_to_LCD.lcd.print(line2)
 
         time.sleep(2)  # Pause to rotate display
+        
+"""
