@@ -46,8 +46,9 @@ def read_temperature(decimals=1):
 # Example: ("temperature", read_temperature)
 SENSORS = [
     ("temperature", read_temperature),
-    ("pressure", read_pressure),
-    ("humidity", read_humidity)
+    #("pressure", read_pressure),
+    #("humidity", read_humidity)
+
 ]
 
 
