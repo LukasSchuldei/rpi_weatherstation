@@ -7,7 +7,7 @@ import csv
 from zoneinfo import ZoneInfo
 from display_to_lcd import print_to_LCD
 device_name= "Peter" #TODO Create .env import
-measurement_interval=1 # Set the interval between measurements, in seconds: 900 = 15 min
+measurement_interval=900 # Set the interval between measurements, in seconds: 900 = 15 min
 test_mode= False # To only print into command line, change to True
 
 # Sensor read functions
@@ -45,7 +45,7 @@ def read_temperature(decimals=1):
 # First: label of sensor, second: function that reads sensor
 # Example: ("temperature", read_temperature)
 SENSORS = [
-    #("temperature", read_temperature),
+    ("temperature", read_temperature),
     ("pressure", read_pressure),
     ("humidity", read_humidity)
 ]
@@ -57,6 +57,13 @@ def get_sensor_data(): # Calls sensor read functions from list SENSORS, creates 
 
 
 def write_data_to_csv(row_data, file_prefix=device_name, directory="data", max_rows=10000):
+    """Prints the measurement values to a CSV, adds header if necessary
+
+    :param row_data: (Dictionary of {Sensor_name, value})
+    :param file_prefix: (_type_, optional): identifier added to CSV file name. Defaults to device_name.
+    :param directory: (str, optional): Directory the files are saved in. Defaults to /data.
+    :param max_rows: (int, optional): max length of file. Defaults to 10000.
+    """
     
     timestamp = datetime.datetime.now(tz=ZoneInfo("Europe/Berlin"))
     # Track how many rows have been written
@@ -93,9 +100,11 @@ def write_data_to_csv(row_data, file_prefix=device_name, directory="data", max_r
 # Log data to csv indefinetly         
 def measurement_loop(test_mode):
     
-    if test_mode: # No data is being saved to files!
+    if test_mode: # Save data, print to console and to LCD-Display
+        
         while True:        
             sensor_data=get_sensor_data()
+            write_data_to_csv(sensor_data)
             print(sensor_data)
             print_to_LCD(measurement_values=sensor_data)
             time.sleep(measurement_interval)
