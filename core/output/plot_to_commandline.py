@@ -1,7 +1,7 @@
 import pandas as pd
 import plotext as plt
 
-def plot_sensor_data(csv_path, max_points=120):
+def plot_sensor_data(csv_path, max_points=180):
     """
     Reads the sensor data CSV file and plots all available sensor data.
     

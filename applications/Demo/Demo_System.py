@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 import time
 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+
 # Import Output functions
 from core.output.display_to_lcd import print_to_LCD
 from core.output.plot_to_commandline import plot_sensor_data
