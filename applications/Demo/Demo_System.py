@@ -1,9 +1,5 @@
 #!/usr/bin/env python
-import os
 import time
-import datetime
-import csv
-from zoneinfo import ZoneInfo
 
 # Import Output functions
 from core.output.display_to_lcd import print_to_LCD
