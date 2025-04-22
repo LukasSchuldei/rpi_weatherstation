@@ -111,6 +111,7 @@ def measurement_loop(test_mode):
             print(sensor_data)
             print_to_LCD(measurement_values=sensor_data)
             time.sleep(measurement_interval)
+            plot_sensor_data(write_data_to_csv.current_file)
             
     else:
         while True:        
