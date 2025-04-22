@@ -5,8 +5,8 @@ import time
 import datetime
 import csv
 from zoneinfo import ZoneInfo
-from display_to_lcd import print_to_LCD
-from plot_to_commandline import plot_sensor_data
+from core.output.display_to_lcd import print_to_LCD
+from core.output.plot_to_commandline import plot_sensor_data
 
 device_name= "Peter" #TODO Create .env import
 measurement_interval=900 # Set the interval between measurements, in seconds: 900 = 15 min
