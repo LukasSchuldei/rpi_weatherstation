@@ -43,20 +43,20 @@ def get_sensor_data(): # Calls sensor read functions from list SENSORS, creates 
      
 # Log data to csv indefinetly         
 def measurement_loop(test_mode):
+    sensor_data=get_sensor_data()
     
     if test_mode: # Save data, print to console and to LCD-Display
         
         while True:        
-            sensor_data=get_sensor_data()
             write_data_to_csv(SENSORS, sensor_data, file_prefix=device_name)
-            print(sensor_data)
+            print_to_LCD(measurement_values=sensor_data)
             time.sleep(measurement_interval)
             plot_sensor_data(write_data_to_csv.current_file)
             
     else:
-        while True:        
-            print_to_LCD(measurement_values=sensor_data)
-            write_data_to_csv(get_sensor_data()) # Save data to csv
+        while True:       
+            print(sensor_data)
+            write_data_to_csv(sensor_data) # Save data to csv
             time.sleep(measurement_interval)
         
 if __name__ == "__main__":
