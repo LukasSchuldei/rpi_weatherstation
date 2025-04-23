@@ -3,7 +3,7 @@ import time
 
 
 
-def read_temperature(decimals=1):
+def temp_ds18b20(decimals=1):
     """Reads the temperature from a 1-wire device and returns it."""
     device = glob.glob("/sys/bus/w1/devices/" + "28*")[0] + "/w1_slave"
     try:

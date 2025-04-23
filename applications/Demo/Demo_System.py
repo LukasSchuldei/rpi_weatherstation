@@ -11,9 +11,8 @@ from core.output.plot_to_commandline import plot_sensor_data
 
 
 # Import sensor read functions
-from core.sensors.temp_DS18B20 import read_temperature
-from core.sensors.humid_demo import read_humidity
-from core.sensors.pres_demo import read_pressure
+from core.sensors.temp_DS18B20 import temp_ds18b20
+from core.sensors.BME680 import temp_bme680, pressure_bme680, rel_hum_bme680
 
 # Import utilities 
 from core.output.save_data import write_data_to_csv
@@ -28,9 +27,10 @@ test_mode= True # To only print into command line, change to True
 # First: label of sensor, second: function that reads sensor
 # Example: ("temperature", read_temperature)
 SENSORS = [
-    ("temperature", read_temperature),
-    ("pressure", read_pressure),
-    ("humidity", read_humidity)
+    ("temp_ds18", temp_ds18b20),
+    ("temp_bme680", temp_bme680),
+    ("pressure", pressure_bme680),
+    ("humidity", rel_hum_bme680)
     
 ]
 
